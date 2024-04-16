@@ -9,5 +9,6 @@ spec:
   ports:
     - name: platformservice
       protocol: TCP
-      port: 80
+      port: 8008
       targetPort: 8080
+      nodePort: 30080

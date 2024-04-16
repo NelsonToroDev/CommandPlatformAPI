@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  namespace: default
+spec:
+  ingressClassName: nginx
+  rules:
+    # Modify our local machine to resolve this host to our localhost, in windows modify etchost file
+    - host: commandplatform.com
+      http:
+        paths:
+          - path: /api/platforms
+            pathType: Prefix
+            backend:
+              service:
+                name: platforms-clusterip-srv # our clusterIP service name
+                port: 
+                  number: 8000
+          - path: /api/commands/platforms
+            pathType: Prefix
+            backend:
+              service:
+                name: commands-clusterip-srv # our clusterIP service name
+                port: 
+                  number: 9000

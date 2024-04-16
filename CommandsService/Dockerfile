@@ -12,8 +12,8 @@ RUN dotnet publish -c release --property:PublishDir=out
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
-ENV ASPNETCORE_URLS=http://+:6000
-EXPOSE 6000
+ENV ASPNETCORE_URLS=http://+:9090
+EXPOSE 9090
 WORKDIR /app
 COPY --from=build-env /app/out ./
 ENTRYPOINT ["dotnet", "CommandsService.dll"]
