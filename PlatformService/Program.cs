@@ -8,7 +8,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IPlatformRepository, PlatformRepository>();
 // Craete an httpClient factory
 builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
-builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMemory"));
+
+if (builder.Environment.IsProduction())
+{
+    Console.WriteLine("--> Using SQLServer DB");
+    builder.Services.AddDbContext<AppDbContext>(opt =>
+        opt.UseSqlServer(builder.Configuration.GetConnectionString("PlatformsConn"))
+    );
+}
+else
+{
+    Console.WriteLine("--> Using InMem DB");
+    builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMemory"));
+}
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -26,6 +39,6 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 
-DbInitializer.Initialize(app);
+DbInitializer.Initialize(app, app.Environment.IsProduction());
 
 app.Run();
