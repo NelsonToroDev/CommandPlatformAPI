@@ -44,7 +44,7 @@ public class PlatformsController : ControllerBase
     return Ok(mapper.Map<PlatformReadDto>(platformItem));
   }
 
-  [HttpPost]
+  [HttpPut]
   public async Task<ActionResult<PlatformReadDto>> CreatePlatform(PlatformCreateDto platformCreateDto)
   {
     Console.WriteLine("--> Creating Platform");

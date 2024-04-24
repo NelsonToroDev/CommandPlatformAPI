@@ -16,5 +16,6 @@ public class PlatformsProfile : Profile
     // Maping is unidirectional
     CreateMap<Platform, PlatformReadDto>();
     CreateMap<PlatformCreateDto, Platform>();
+    CreateMap<PlatformReadDto, PlatformPublishedDto>();
   }
 }

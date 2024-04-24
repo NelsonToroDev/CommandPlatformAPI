@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PlatformService.AsyncDataServices;
 using PlatformService.Data;
 using PlatformService.SyncDataServices.Http;
 
@@ -8,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IPlatformRepository, PlatformRepository>();
 // Craete an httpClient factory
 builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
+// RabbitMQ
+builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
+
 
 if (builder.Environment.IsProduction())
 {
