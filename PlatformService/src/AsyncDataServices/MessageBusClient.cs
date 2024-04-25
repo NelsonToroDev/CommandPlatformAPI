@@ -10,7 +10,7 @@ public class MessageBusClient : IMessageBusClient
     private readonly IConfiguration configuration;
     private readonly IConnection? connection;
     private readonly IModel? channel;
-    private const  string EXCHANGE_NAME = "trigger";
+    private const string EXCHANGE_NAME = "trigger";
 
     public MessageBusClient(IConfiguration configuration)
     {
