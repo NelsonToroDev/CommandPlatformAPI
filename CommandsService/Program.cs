@@ -1,6 +1,7 @@
 using CommandsService.AsyncDataServices;
 using CommandsService.Data;
 using CommandsService.EventProcessing;
+using CommandsService.SyncDataServices.Grpc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,8 +14,11 @@ builder.Services.AddControllers();
 builder.Services.AddHostedService<MessageBusSubscriber>();
 builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+// Grpc
+builder.Services.AddScoped<IPlatformDataClient,PlatformDataClient>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 
@@ -26,5 +30,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
+
+// Seeding using Grpc
+DbInitializer.Initialize(app);
 
 app.Run();

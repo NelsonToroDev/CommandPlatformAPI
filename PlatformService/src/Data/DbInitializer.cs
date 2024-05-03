@@ -7,7 +7,7 @@ public static class DbInitializer
 {
   public static void Initialize(IApplicationBuilder applicationBuilder, bool isProduction)
   {
-    using( var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+    using(var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
     {
       SeedData(serviceScope.ServiceProvider.GetService<AppDbContext>(), isProduction);
     }
