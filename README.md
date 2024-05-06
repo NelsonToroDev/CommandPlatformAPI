@@ -1,6 +1,7 @@
-# Command Platform API uses a microservice architecture implemented with Kubernates, RabbitMQ, Docker, Nginx and GRPC
+# Command Platform API
+This API uses a microservice architecture implemented with Kubernates, RabbitMQ, Docker, Nginx and GRPC
 
-This project will provide an API to manage all plaftforms a company has acquired as well as its related and most used commands, for instance: 
+This project will provide an API to manage all platforms a company has acquired as well as its related and most used commands, for instance: 
 - Platform: AWS EC2
   Commands:
   * aws ec2 create-key-pair --key-name my-key-pair
