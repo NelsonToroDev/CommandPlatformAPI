@@ -1,3 +1,5 @@
+This API uses a microservice architecture implemented with Kubernates, RabbitMQ, Docker, Nginx and GRPC
+
 # Command Platform API
 
 This API uses a microservice architecture implemented with Kubernates, RabbitMQ, Docker, Nginx and GRPC
