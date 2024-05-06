@@ -31,6 +31,6 @@ spec:
       targetPort: 8080
     - name: platformgrpc
       protocol: TCP
-      port: 666
-      targetPort: 666
+      port: 8081
+      targetPort: 8081
 

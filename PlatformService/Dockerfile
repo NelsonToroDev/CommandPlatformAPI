@@ -12,7 +12,8 @@ RUN dotnet publish -c release --property:PublishDir=out
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
-ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_URLS=https://+:8081;http://+:8080
+EXPOSE 8081
 EXPOSE 8080
 WORKDIR /app
 COPY --from=build-env /app/out ./
