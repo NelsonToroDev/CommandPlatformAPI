@@ -37,11 +37,8 @@ var app = builder.Build();
 Console.WriteLine($"--> CommandService endpoint configuration: {app.Configuration["CommandService"]}");
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
