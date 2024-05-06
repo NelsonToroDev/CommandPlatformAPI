@@ -1,11 +1,19 @@
-# Command Platform API
+# Command Platform API uses a microservice architecture implemented with Kubernates, RabbitMQ, Docker, Nginx and GRPC
 
 This project will provide an API to manage all plaftforms a company has acquired as well as its related and most used commands, for instance: 
-- Platform: AWS EC2  
+- Platform: AWS EC2
   Commands:
+  * aws ec2 create-key-pair --key-name my-key-pair
+  * aws iam list-users --output table
+  * aws ec2 start-instances --instance-ids <value>
+  * etc
 
-- Platform: Azure DevOps
+- Platform: Azure
   Commands:
+  * az vm start --resource-group myResourceGroup --name myVM
+  * az vm delete --resource-group myResourceGroup --name myVM
+  * az vm list
+  * etc
 
 *This API has the following microservice architecture implemented with Kubernates, RabbitMQ, Docker, Nginx*
 ![](./Assets/Architecture.png)
@@ -27,8 +35,12 @@ This project will provide an API to manage all plaftforms a company has acquired
 
 `kubectl apply -f ./`
 
-2. Platform Service EndPoint
-3. Commands Service EndPoint
+2. Configure your hosts file to be able to resolve the following URL
+  `127.0.0.1 commandplatform.com`
+1. Platform Service EndPoint
+    http://commandplatform.com/api/platforms
+2. Commands Service EndPoint
+    http://commandplatform.com/api/c/platforms
 
 
 
