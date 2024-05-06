@@ -1,5 +1,3 @@
-This API uses a microservice architecture implemented with Kubernates, RabbitMQ, Docker, Nginx and GRPC
-
 # Command Platform API
 
 This API uses a microservice architecture implemented with Kubernates, RabbitMQ, Docker, Nginx and GRPC
@@ -40,10 +38,12 @@ This project will provide an API to manage all platforms a company has acquired 
 `kubectl apply -f ./`
 
 2. Configure your hosts file to be able to resolve the following URL
+   
   `127.0.0.1 commandplatform.com`
-1. Platform Service EndPoint
+  
+3. Platform Service EndPoint
     http://commandplatform.com/api/platforms
-2. Commands Service EndPoint
+4. Commands Service EndPoint
     http://commandplatform.com/api/c/platforms
 
 
