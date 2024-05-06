@@ -1,4 +1,5 @@
 # Command Platform API
+
 This API uses a microservice architecture implemented with Kubernates, RabbitMQ, Docker, Nginx and GRPC
 
 This project will provide an API to manage all platforms a company has acquired as well as its related and most used commands, for instance: 
