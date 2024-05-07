@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swagger-ui
+  labels:
+    app: swagger-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: swagger-ui
+  template:
+    metadata:
+      labels:
+        app: swagger-ui
+    spec:
+      containers:
+        - name: swagger-ui
+          image: 'swaggerapi/swagger-ui:v5.17.5'
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: BASE_URL
+              value: /swagger-ui
+            - name: URLS
+              value: >-
+                [{name:'PlatformService',url:'http://platforms-clusterip-srv:8000/swagger/'},{name:'CommandsService',url:'https://commands-clusterip-srv:9000/swagger/'}]
+          resources:
+            limits:
+              cpu: 50m
+              memory: 50Mi
+            requests:
+              cpu: 5m
+              memory: 5Mi
+          imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: swagger-ui-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: swagger-ui
+  ports:
+    - name: swagger-ui
+      protocol: TCP
+      port: 8090
+      targetPort: 8080
+

@@ -36,11 +36,14 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 Console.WriteLine($"--> CommandService endpoint configuration: {app.Configuration["CommandService"]}");
 
+// Configure CORS
+app.UseCors(options => options.AllowAnyOrigin());
+
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.MapControllers();
 

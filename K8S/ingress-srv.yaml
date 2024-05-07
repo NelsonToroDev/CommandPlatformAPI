@@ -14,13 +14,20 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: platforms-clusterip-srv # our clusterIP service name
+                name: platforms-clusterip-srv # Platform clusterIP service name
                 port: 
                   number: 8000
           - path: /api/c/platforms
             pathType: Prefix
             backend:
               service:
-                name: commands-clusterip-srv # our clusterIP service name
+                name: commands-clusterip-srv # Commands clusterIP service name
                 port: 
                   number: 9000
+          - path: /swagger
+            pathType: Prefix
+            backend:
+              service:
+                name: swagger-ui-clusterip-srv # Swagger clusterIP service name
+                port: 
+                  number: 8090
