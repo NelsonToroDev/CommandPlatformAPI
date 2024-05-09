@@ -22,11 +22,13 @@ spec:
               containerPort: 8080
               protocol: TCP
           env:
-            - name: BASE_URL
-              value: /swagger-ui
+            - name: QUERY_CONFIG_ENABLED
+              value: 'true'
+            - name: VALIDATOR_URL
+              value: 'none'
             - name: URLS
               value: >-
-                [{name:'PlatformService',url:'http://platforms-clusterip-srv:8000/swagger/'},{name:'CommandsService',url:'https://commands-clusterip-srv:9000/swagger/'}]
+                [{name:'PlatformService',url:'http://commandplatform.com/api/swagger/v1/swagger.json'},{name:'CommandsService',url:'http://commandplatform.com/api/c/swagger/v1/swagger.json'}]
           resources:
             limits:
               cpu: 50m

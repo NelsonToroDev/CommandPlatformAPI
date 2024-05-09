@@ -10,21 +10,21 @@ spec:
     - host: commandplatform.com
       http:
         paths:
-          - path: /api/platforms
+          - path: /api
             pathType: Prefix
             backend:
               service:
                 name: platforms-clusterip-srv # Platform clusterIP service name
-                port: 
+                port:
                   number: 8000
-          - path: /api/c/platforms
+          - path: /api/c
             pathType: Prefix
             backend:
               service:
                 name: commands-clusterip-srv # Commands clusterIP service name
                 port: 
                   number: 9000
-          - path: /swagger
+          - path: /
             pathType: Prefix
             backend:
               service:

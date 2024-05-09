@@ -10,11 +10,18 @@ public static class DbInitializer
   {
     using(var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
     {
-      var grpcClient =  serviceScope.ServiceProvider.GetService<IPlatformDataClient>();
-      var platforms = grpcClient!.ReturnAllPlatforms();
-      var commandRepository = serviceScope.ServiceProvider.GetService<ICommandRepository>();
-      
-      SeedData(commandRepository, platforms);
+      try
+      {
+        var grpcClient =  serviceScope.ServiceProvider.GetService<IPlatformDataClient>();
+        var platforms = grpcClient!.ReturnAllPlatforms();
+        var commandRepository = serviceScope.ServiceProvider.GetService<ICommandRepository>();
+        
+        SeedData(commandRepository, platforms);
+      }
+      catch(Exception ex)
+      {
+        Console.WriteLine($"--> Grpc: Exception Seeding new platforms: '{ex.Message}' \n {ex.StackTrace}");
+      }
     }
   }
 

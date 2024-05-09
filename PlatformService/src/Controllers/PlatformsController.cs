@@ -9,7 +9,7 @@ using PlatformService.SyncDataServices.Http;
 
 namespace PlatformService.Controllers;
 
-[Route("api/[controller]")] // "apli/platforms"
+[Route("api/[controller]")] // "api/platforms"
 [ApiController]
 public class PlatformsController : ControllerBase
 {
@@ -47,7 +47,7 @@ public class PlatformsController : ControllerBase
     return Ok(mapper.Map<PlatformReadDto>(platformItem));
   }
 
-  [HttpPut]
+  [HttpPost]
   public async Task<ActionResult<PlatformReadDto>> CreatePlatform(PlatformCreateDto platformCreateDto)
   {
     Console.WriteLine("--> Creating Platform");

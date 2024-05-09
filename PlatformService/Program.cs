@@ -29,6 +29,19 @@ else
 }
 
 builder.Services.AddEndpointsApiExplorer();
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSwaggerGen();
@@ -37,11 +50,18 @@ var app = builder.Build();
 Console.WriteLine($"--> CommandService endpoint configuration: {app.Configuration["CommandService"]}");
 
 // Configure CORS
-app.UseCors(options => options.AllowAnyOrigin());
+app.UseCors();
 
-// Configure the HTTP request pipeline.
-app.UseSwagger();
-app.UseSwaggerUI();
+// Configure Swagger.
+app.UseSwagger(c => 
+{
+    c.RouteTemplate = "api/swagger/{documentName}/swagger.json";
+});
+app.UseSwaggerUI(c => 
+{
+    c.SwaggerEndpoint("swagger/v1/swagger.json", "PlatformService");
+    c.RoutePrefix = "api";
+});
 
 //app.UseHttpsRedirection();
 

@@ -49,7 +49,7 @@ public class CommandsController : ControllerBase
     return Ok(mapper.Map<CommandReadDto>(command));
   }
 
-  [HttpPut]
+  [HttpPost]
   public ActionResult<CommandReadDto> CreateCommandForPlatform(int platformId, CommandCreateDto commandCreateDto)
   {
     Console.WriteLine($"--> CreateCommandForPlatform for Platform '{platformId}' from CommandService");
