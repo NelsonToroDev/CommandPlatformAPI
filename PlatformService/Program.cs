@@ -3,79 +3,97 @@ using PlatformService.AsyncDataServices;
 using PlatformService.Data;
 using PlatformService.SyncDataServices.Grpc;
 using PlatformService.SyncDataServices.Http;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container
-builder.Services.AddScoped<IPlatformRepository, PlatformRepository>();
-// Craete an httpClient factory
-builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
-// RabbitMQ
-builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
-// Grpc
-builder.Services.AddGrpc();
-
-if (builder.Environment.IsProduction())
+namespace PlatformService;
+public class Startup
 {
-    Console.WriteLine("--> Using SQLServer DB");
-    builder.Services.AddDbContext<AppDbContext>(opt =>
-        opt.UseSqlServer(builder.Configuration.GetConnectionString("PlatformsConn"))
-    );
-}
-else
-{
-    Console.WriteLine("--> Using InMem DB");
-    builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMemory"));
-}
+    public IConfiguration Configuration { get; }
 
-builder.Services.AddEndpointsApiExplorer();
+    public Startup(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
 
-// CORS
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-        policy =>
+    // This method gets called by the runtime. Use this method to add services to the container
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // Add services to the container
+        services.AddScoped<IPlatformRepository, PlatformRepository>();
+        // Craete an httpClient factory
+        services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
+        // RabbitMQ
+        services.AddSingleton<IMessageBusClient, MessageBusClient>();
+        // Grpc
+        services.AddGrpc();
+
+        IServiceProvider serviceProvider = services.BuildServiceProvider();
+        IHostingEnvironment env = serviceProvider.GetService<IHostingEnvironment>();
+
+        if (env!.IsProduction())
         {
-            policy.AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();
+            Console.WriteLine("--> Using SQLServer DB");
+            services.AddDbContext<AppDbContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("PlatformsConn"))
+            );
+        }
+        else
+        {
+            Console.WriteLine("--> Using InMem DB");
+            services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMemory"));
+        }
+
+        services.AddEndpointsApiExplorer();
+
+        // CORS
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(
+                policy =>
+                {
+                    policy.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
         });
-});
 
-builder.Services.AddControllers();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddSwaggerGen();
+        services.AddControllers();
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddSwaggerGen();
 
-var app = builder.Build();
-Console.WriteLine($"--> CommandService endpoint configuration: {app.Configuration["CommandService"]}");
+    }
 
-// Configure CORS
-app.UseCors();
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        Console.WriteLine($"--> CommandService endpoint configuration: {Configuration["CommandService"]}");
 
-// Configure Swagger.
-app.UseSwagger(c => 
-{
-    c.RouteTemplate = "api/swagger/{documentName}/swagger.json";
-});
-app.UseSwaggerUI(c => 
-{
-    c.SwaggerEndpoint("swagger/v1/swagger.json", "PlatformService");
-    c.RoutePrefix = "api";
-});
+        // Configure CORS
+        app.UseCors();
 
-//app.UseHttpsRedirection();
+        // Configure Swagger.
+        app.UseSwagger(c => 
+        {
+            c.RouteTemplate = "api/swagger/{documentName}/swagger.json";
+        });
+        app.UseSwaggerUI(c => 
+        {
+            c.SwaggerEndpoint("swagger/v1/swagger.json", "PlatformService");
+            c.RoutePrefix = "api";
+        });
 
-app.MapControllers();
+        //app.UseHttpsRedirection();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+            endpoints.MapGrpcService<GrpcPlatformService>();
 
-// Grpc Mapping endpoint
-app.MapGrpcService<GrpcPlatformService>();
+            endpoints.MapGet("/protos/platforms.proto", async context =>
+            {
+                await context.Response.WriteAsync(File.ReadAllText("Protos/platforms.proto"));
+            });
+        });
 
-// Publish the proto contract just as a good practice
-app.MapGet("/protos/platforms.proto", async context =>
-{
-    await context.Response.WriteAsync(File.ReadAllText("Protos/platforms.proto"));
-});
-
-DbInitializer.Initialize(app, app.Environment.IsProduction());
-
-app.Run();
+        DbInitializer.Initialize(app, env.IsProduction());
+    }
+}
